@@ -4,8 +4,8 @@ import openai
 import streamlit as st
 
 
-weaviate_api_key = st.secrets["API_KEYS"]["weaviate"]
-openai.api_key = st.secrets["API_KEYS"]["openai"]
+#weaviate_api_key = st.secrets["API_KEYS"]["weaviate"]
+#openai.api_key = st.secrets["API_KEYS"]["openai"]
 
 st.set_page_config(page_title="SellYouAnythingGPT", page_icon="💦", layout="wide")
 st.header("Help GPT sell your mother in-law!💦\n")
@@ -31,16 +31,5 @@ with st.sidebar:
     st.markdown("a demo for [AWAPAC2023](%s)" %awapac2023_url)
 
 
-def clear_text():
-    st.session_state["input"] = ""
-
-# We will get the user's input by calling the get_text function
-def get_text():
-    input_text = st.text_input("What would you like to market, advertise or sell?", key="input")
-    return input_text
-
-
-user_input = get_text()
-
-if user_input:
-    output = answer_query_with_context_pinecone(user_input)
+with st.chat_message("user"):
+    st.write("Hello 👋")
