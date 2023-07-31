@@ -13,6 +13,7 @@ awapac2023_url = "https://advertisingweek.com/event/awapac-2023/"
 
 st.set_page_config(page_title="MarketAnythingGPT", page_icon="💦", layout="wide")
 st.title("MarketAnythingGPT - Market Anything with GPT 💦\n")
+st.markdown("---")
 st.header("a demo by [Core Intelligence](%s) for AWAPAC2023" %coreintelligence_url)
 
 
