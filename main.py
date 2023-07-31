@@ -7,7 +7,7 @@ import streamlit as st
 #weaviate_api_key = st.secrets["API_KEYS"]["weaviate"]
 #openai.api_key = st.secrets["API_KEYS"]["openai"]
 
-st.set_page_config(page_title="MarketYouAnythingGPT", page_icon="💦", layout="wide")
+st.set_page_config(page_title="MarketAnythingGPT", page_icon="💦", layout="wide")
 st.header("Market Anything with GPT 💦\n")
 
 paulconyngham_url = "https://www.linkedin.com/in/paustevenlconyngham/"
@@ -20,7 +20,7 @@ with st.sidebar:
         "MarketYouAnyThingGPT - input a product you would like \n"
         "to market or sell. Sit back, relax & let GPT do the rest \n"
         "\n"
-        "Especially good at selling mothers in-law\n"
+        "Especially good at selling mothers in-law 💦💦\n"
         )
     st.markdown("---")
     st.markdown("A side project by [Paul Conyngham](%s)" %paulconyngham_url)
