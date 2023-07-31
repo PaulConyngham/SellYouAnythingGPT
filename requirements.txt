@@ -32,7 +32,6 @@ rich==13.3.1
 semver==2.13.0
 six==1.16.0
 smmap==5.0.0
-streamlit==1.19.0
 streamlit-chat==0.0.2.1
 tiktoken==0.2.0
 toml==0.10.2
