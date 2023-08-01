@@ -125,7 +125,9 @@ st.text("What product or service would you like to market?")
 # After the functions are defined, initialize session state variables
 if "openai_model" not in st.session_state:
     st.session_state["openai_model"] = "gpt-3.5-turbo"
+if "counter" not in st.session_state:
     st.session_state["counter"] = 1
+if "messages" not in st.session_state:
     st.session_state["messages"] = []
 
 # Define the function dictionaries here, after the functions are defined
