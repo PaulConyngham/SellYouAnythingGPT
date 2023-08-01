@@ -12,10 +12,12 @@ paulconyngham_url = "https://www.linkedin.com/in/paustevenlconyngham/"
 coreintelligence_url ="https://www.coreintelligence.com.au/"
 awapac2023_url = "https://advertisingweek.com/event/awapac-2023/"
 
-st.set_page_config(page_title="MarketAnythingGPT", page_icon="💦", layout="wide")
-st.title("MarketAnythingGPT - Market Anything with GPT 💦\n")
+st.set_page_config(page_title="MarketAnythingGPT", page_icon="✌️", layout="wide")
+st.title("MarketAnythingGPT - Market Anything with GPT ✌️\n")
 st.markdown("---")
 st.header("a demo by [Core Intelligence](%s) for AWAPAC2023" %coreintelligence_url)
+st.markdown("---")
+st.header("Under Construction, please check back later 🏗️👷")
 
 
 
@@ -30,8 +32,6 @@ with st.sidebar:
     st.markdown("A side project by [Paul Conyngham](%s)" %paulconyngham_url)
     st.markdown("of [Core Intelligence](%s)" %coreintelligence_url)
     st.markdown("a demo for [AWAPAC2023](%s)" %awapac2023_url)
-
-
 
 
 openai.api_key = st.secrets["OPENAI_API_KEY"]
@@ -104,44 +104,7 @@ def categorize_product(product_name):
 
     return product_category
 
-# Initialize chat history
-if "messages" not in st.session_state:
-    st.session_state.messages = []
 
-# Display chat messages from history on app rerun
-for message in st.session_state.messages:
-    with st.chat_message(message["role"]):
-        st.markdown(message["content"])
-
-# Setting up functions to handle the different text input flows
-counter = 0
-
-def case_select_LLMs(counter, prompt):
-    if counter == 1:
-        return categorize_product(prompt)
-    elif counter == 2:
-        return "You chose B"
-    elif counter == 3:
-        return "You chose C"
-    else:
-        return "Invalid choice"
-
-# React to user input
-if prompt := st.chat_input("What product or service would you like to market?"):
-    # Display user message in chat message container
-    st.chat_message("user").markdown(prompt)
-    # Add user message to chat history
-    st.session_state.messages.append({"role": "user", "content": prompt})
-    counter += 1
-
-    print(prompt)
-
-    response = case_select_LLMs(counter, prompt)
-    # Display assistant response in chat message container
-    with st.chat_message("assistant"):
-        st.markdown(response)
-    # Add assistant response to chat history
-    st.session_state.messages.append({"role": "assistant", "content": response})
 
 
 
