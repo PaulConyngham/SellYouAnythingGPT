@@ -121,24 +121,29 @@ st.text("What product or service would you like to market?")
 
 #"Send a message"
 
-def handle_chat():
-    # Define the dictionary mappings
-    category_func_dict = {
-        1: initiate_categorization,
-        2: handle_category_choice,
-        3: confirm_category,
-    }
-    product_info_func_dict = {
-        1: initiate_product_info_generation,
-        2: confirm_product_info,
-    }
 
-    # Initialize the counter, the current function dictionary, and the messages
-    if "openai_model" not in st.session_state:
-        st.session_state["openai_model"] = "gpt-3.5-turbo"
-        st.session_state["counter"] = 1
-        st.session_state["current_func_dict"] = category_func_dict
-        st.session_state["messages"] = []
+# After the functions are defined, initialize session state variables
+if "openai_model" not in st.session_state:
+    st.session_state["openai_model"] = "gpt-3.5-turbo"
+    st.session_state["counter"] = 1
+    st.session_state["messages"] = []
+
+# Define the function dictionaries here, after the functions are defined
+category_func_dict = {
+    1: initiate_categorization,
+    2: handle_category_choice,
+    3: confirm_category,
+}
+
+product_info_func_dict = {
+    1: initiate_product_info_generation,
+    2: confirm_product_info,
+}
+
+# Now we can assign the function dictionary to the session state variable
+st.session_state["current_func_dict"] = category_func_dict
+
+def handle_chat():
 
     # React to user input
     if prompt := st.chat_input("What product or service would you like to market?"):
