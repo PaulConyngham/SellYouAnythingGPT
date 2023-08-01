@@ -1,6 +1,7 @@
 #Hello world
 
 import openai
+import re
 import streamlit as st
 
 
@@ -38,6 +39,17 @@ openai.api_key = st.secrets["OPENAI_API_KEY"]
 
 if "openai_model" not in st.session_state:
     st.session_state["openai_model"] = "gpt-3.5-turbo"
+
+# Utility function to parse the assistant's message into separate categories
+def parse_categories(message):
+    # Remove any leading/trailing whitespace and split into lines
+    lines = message.strip().split('\n')
+
+    # Prepare a regex pattern to match numerical list items
+    pattern = re.compile(r'^\d+\.\s*')
+
+    # Remove numerical prefixes from each line and return the result
+    return [pattern.sub('', line) for line in lines]
 
 
 
