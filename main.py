@@ -156,7 +156,7 @@ def handle_chat():
             if st.session_state["current_func_dict"] is category_func_dict:
                 st.session_state["current_func_dict"] = product_info_func_dict  # Switch to the product info flow
             else:
-                st.session_state["current_func_dict"] = category_func_dict  # Switch back to the category flow
+                st.session_state["current_func_dict"] = category_func_dict  # Switch back to the category flow cf
             st.session_state["counter"] = 1  # Reset the counter
         else:
             if "no" in prompt.lower():
