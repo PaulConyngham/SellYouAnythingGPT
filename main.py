@@ -134,7 +134,7 @@ if prompt := st.chat_input("What product or service would you like to market?"):
     st.session_state.messages.append({"role": "user", "content": prompt})
     counter += 1
 
-    response = call_LLMs(counter)
+    response = case_select_LLMs(counter)
     # Display assistant response in chat message container
     with st.chat_message("assistant"):
         st.markdown(response)
