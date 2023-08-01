@@ -117,50 +117,58 @@ def confirm_product_info(user_confirmation):
         return "Please specify what is wrong with the product details."
 
 
-# Define the dictionary mappings
-category_func_dict = {
-    1: initiate_categorization,
-    2: handle_category_choice,
-    3: confirm_category,
-}
-product_info_func_dict = {
-    1: initiate_product_info_generation,
-    2: confirm_product_info,
-}
-
-
 st.text("What product or service would you like to market?")
 
 #"Send a message"
 
-# React to user input
-if prompt := st.chat_input("Send a message"):
-    # Display user message in chat message container
-    st.chat_message("user").markdown(prompt)
-    # Add user message to chat history
-    st.session_state.messages.append({"role": "user", "content": prompt})
+def handle_chat():
+    # Define the dictionary mappings
+    category_func_dict = {
+        1: initiate_categorization,
+        2: handle_category_choice,
+        3: confirm_category,
+    }
+    product_info_func_dict = {
+        1: initiate_product_info_generation,
+        2: confirm_product_info,
+    }
 
-    # Get the function using the dictionary mapping
-    func = st.session_state.current_func_dict.get(st.session_state.counter, lambda x: "Invalid choice")
-    response = func(prompt)
+    # Initialize the counter and the current function dictionary
+    if 'counter' not in st.session_state:
+        st.session_state.counter = 1
+        st.session_state.current_func_dict = category_func_dict
 
-    # If the response is True, it means the user has confirmed something
-    if response is True:
-        if st.session_state.current_func_dict is category_func_dict:
-            st.session_state.current_func_dict = product_info_func_dict  # Switch to the product info flow
+    # React to user input
+    if prompt := st.chat_input("Send a message"):
+        # Display user message in chat message container
+        st.chat_message("user").markdown(prompt)
+        # Add user message to chat history
+        st.session_state.messages.append({"role": "user", "content": prompt})
+
+        # Get the function using the dictionary mapping
+        func = st.session_state.current_func_dict.get(st.session_state.counter, lambda x: "Invalid choice")
+        response = func(prompt)
+
+        # If the response is True, it means the user has confirmed something
+        if response is True:
+            if st.session_state.current_func_dict is category_func_dict:
+                st.session_state.current_func_dict = product_info_func_dict  # Switch to the product info flow
+            else:
+                st.session_state.current_func_dict = category_func_dict  # Switch back to the category flow
+            st.session_state.counter = 1  # Reset the counter
         else:
-            st.session_state.current_func_dict = category_func_dict  # Switch back to the category flow
-        st.session_state.counter = 1  # Reset the counter
-    else:
-        if "no" in prompt.lower():
-            st.session_state.counter -= 1  # Go back to the previous state
-        else:
-            st.session_state.counter += 1  # Go to the next state
+            if "no" in prompt.lower():
+                st.session_state.counter -= 1  # Go back to the previous state
+            else:
+                st.session_state.counter += 1  # Go to the next state
 
-    # Display assistant response in chat message container
-    with st.chat_message("assistant"):
-        st.markdown(response)
-    # Add assistant response to chat history
-    st.session_state.messages.append({"role": "assistant", "content": response})
+        # Display assistant response in chat message container
+        with st.chat_message("assistant"):
+            st.markdown(response)
+        # Add assistant response to chat history
+        st.session_state.messages.append({"role": "assistant", "content": response})
+
+handle_chat()
+
 
 
