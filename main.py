@@ -104,26 +104,28 @@ def categorize_product(product_name):
 
     return product_category
 
-
+# Initialize chat history
 if "messages" not in st.session_state:
     st.session_state.messages = []
 
-def clear_text():
-    st.session_state["input"] = ""
+# Display chat messages from history on app rerun
+for message in st.session_state.messages:
+    with st.chat_message(message["role"]):
+        st.markdown(message["content"])
 
-# We will get the user's input by calling the get_text function
-def get_text():
-    input_text = st.text_input("What product or service would you like to advertise?", key="input")
-    return input_text
+# React to user input
+if prompt := st.chat_input("What product or service would you like to market??"):
+    # Display user message in chat message container
+    st.chat_message("user").markdown(prompt)
+    # Add user message to chat history
+    st.session_state.messages.append({"role": "user", "content": prompt})
 
-user_input = get_text()
-
-if user_input:
-    output = categorize_product(user_input)
-
-    # store the output 
-    st.session_state.past.append(user_input)
-    #st.session_state.generated.append(output)
+    response = f"Echo: {prompt}"
+    # Display assistant response in chat message container
+    with st.chat_message("assistant"):
+        st.markdown(response)
+    # Add assistant response to chat history
+    st.session_state.messages.append({"role": "assistant", "content": response})
 
 
 
