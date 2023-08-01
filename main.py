@@ -39,6 +39,9 @@ openai.api_key = st.secrets["OPENAI_API_KEY"]
 
 if "openai_model" not in st.session_state:
     st.session_state["openai_model"] = "gpt-3.5-turbo"
+    st.session_state.counter = 1
+    st.session_state.current_func_dict = category_func_dict
+    st.session_state.messages = []  # initialize messages
 
 
 
@@ -125,11 +128,6 @@ product_info_func_dict = {
     2: confirm_product_info,
 }
 
-
-# Initialize the counter and the current function dictionary
-if 'counter' not in st.session_state:
-    st.session_state.counter = 1
-    st.session_state.current_func_dict = category_func_dict
 
 st.text("What product or service would you like to market?")
 
