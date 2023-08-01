@@ -158,6 +158,14 @@ def handle_chat():
         func = st.session_state["current_func_dict"].get(st.session_state["counter"], lambda x: "Invalid choice")
         response = func(prompt)
 
+        print(response)
+
+        # Remove any empty strings from the list
+        response = [sentence for sentence in response if sentence]
+
+        # Join the list into a single string, with each sentence on a new line
+        response = '\n'.join(response)
+
         # If the response is True, it means the user has confirmed something
         if response is True:
             if st.session_state["current_func_dict"] is category_func_dict:
