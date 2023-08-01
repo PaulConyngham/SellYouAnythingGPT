@@ -133,40 +133,42 @@ def handle_chat():
         2: confirm_product_info,
     }
 
-    # Initialize the counter and the current function dictionary
-    if 'counter' not in st.session_state:
-        st.session_state.counter = 1
-        st.session_state.current_func_dict = category_func_dict
+    # Initialize the counter, the current function dictionary, and the messages
+    if "openai_model" not in st.session_state:
+        st.session_state["openai_model"] = "gpt-3.5-turbo"
+        st.session_state["counter"] = 1
+        st.session_state["current_func_dict"] = category_func_dict
+        st.session_state["messages"] = []
 
     # React to user input
-    if prompt := st.chat_input("Send a message"):
+    if prompt := st.chat_input("What product or service would you like to market?"):
         # Display user message in chat message container
         st.chat_message("user").markdown(prompt)
         # Add user message to chat history
-        st.session_state.messages.append({"role": "user", "content": prompt})
+        st.session_state["messages"].append({"role": "user", "content": prompt})
 
         # Get the function using the dictionary mapping
-        func = st.session_state.current_func_dict.get(st.session_state.counter, lambda x: "Invalid choice")
+        func = st.session_state["current_func_dict"].get(st.session_state["counter"], lambda x: "Invalid choice")
         response = func(prompt)
 
         # If the response is True, it means the user has confirmed something
         if response is True:
-            if st.session_state.current_func_dict is category_func_dict:
-                st.session_state.current_func_dict = product_info_func_dict  # Switch to the product info flow
+            if st.session_state["current_func_dict"] is category_func_dict:
+                st.session_state["current_func_dict"] = product_info_func_dict  # Switch to the product info flow
             else:
-                st.session_state.current_func_dict = category_func_dict  # Switch back to the category flow
-            st.session_state.counter = 1  # Reset the counter
+                st.session_state["current_func_dict"] = category_func_dict  # Switch back to the category flow
+            st.session_state["counter"] = 1  # Reset the counter
         else:
             if "no" in prompt.lower():
-                st.session_state.counter -= 1  # Go back to the previous state
+                st.session_state["counter"] -= 1  # Go back to the previous state
             else:
-                st.session_state.counter += 1  # Go to the next state
+                st.session_state["counter"] += 1  # Go to the next state
 
         # Display assistant response in chat message container
         with st.chat_message("assistant"):
             st.markdown(response)
         # Add assistant response to chat history
-        st.session_state.messages.append({"role": "assistant", "content": response})
+        st.session_state["messages"].append({"role": "assistant", "content": response})
 
 handle_chat()
 
