@@ -21,7 +21,7 @@ st.header("a demo by [Core Intelligence](%s) for AWAPAC2023" %coreintelligence_u
 with st.sidebar:
     st.markdown("# About 🙌")
     st.markdown(
-        "MarketYouAnyThingGPT - input a product you would like \n"
+        "MarketAnyThingGPT - input a product you would like \n"
         "to market or sell. Sit back, relax & let GPT do the rest \n"
         "\n"
         )
@@ -93,46 +93,26 @@ def categorize_product(product_name):
     return product_category
 
 
-
-
-
-
-
 if "messages" not in st.session_state:
     st.session_state.messages = []
 
+def clear_text():
+    st.session_state["input"] = ""
 
-# Step 2: Create text input for product name
-product_name = st.text_input("Enter the product name:")
+# We will get the user's input by calling the get_text function
+def get_text():
+    input_text = st.text_input("What product or service would you like to advertise", key="input")
+    return input_text
 
-# Step 3: Call the function with the entered product name
-if product_name:
-    product_category = categorize_product(product_name)
+user_input = get_text()
 
-    # Step 4: Store the product category in the session state
-    st.session_state["product_category"] = product_category
+if user_input:
+    output = categorize_product(user_input)
 
-for message in st.session_state.messages:
-    with st.chat_message(message["role"]):
-        st.markdown(message["content"])
+    # store the output 
+    st.session_state.past.append(user_input)
+    #st.session_state.generated.append(output)
 
-if prompt := st.chat_input("What would you like to market?"):
-    st.session_state.messages.append({"role": "user", "content": prompt})
-    with st.chat_message("user"):
-        st.markdown(prompt)
 
-    with st.chat_message("assistant"):
-        message_placeholder = st.empty()
-        full_response = ""
-        for response in openai.ChatCompletion.create(
-            model=st.session_state["openai_model"],
-            messages=[
-                {"role": m["role"], "content": m["content"]}
-                for m in st.session_state.messages
-            ],
-            stream=True,
-        ):
-            full_response += response.choices[0].delta.get("content", "")
-            message_placeholder.markdown(full_response + "▌")
-        message_placeholder.markdown(full_response)
-    st.session_state.messages.append({"role": "assistant", "content": full_response})
+
+
