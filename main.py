@@ -158,8 +158,6 @@ def handle_chat():
         func = st.session_state["current_func_dict"].get(st.session_state["counter"], lambda x: "Invalid choice")
         response = func(prompt)
 
-        print(response)
-
         # Remove any empty strings from the list
         response = [sentence for sentence in response if sentence]
 
