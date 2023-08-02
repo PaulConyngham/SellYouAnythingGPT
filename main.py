@@ -183,6 +183,12 @@ def handle_chat():
             'suggested_categories': st.session_state.get('suggested_categories')  # Using get method in case suggested_categories is not present
         }
 
+        if 'suggested_categories' not in st.session_state:
+            initiate_categorization(args)
+        else:
+            func = st.session_state["current_func_dict"].get(st.session_state["counter"], lambda x: "Invalid choice")
+            response = func(args)
+
         # Get the function using the dictionary mapping
         func = st.session_state["current_func_dict"].get(st.session_state["counter"], lambda x: "Invalid choice")
         response = func(args)
