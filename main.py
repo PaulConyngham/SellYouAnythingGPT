@@ -179,7 +179,7 @@ def handle_chat():
 
         # Get the function using the dictionary mapping
         func = st.session_state["current_func_dict"].get(st.session_state["counter"], lambda x: "Invalid choice")
-        response = func(prompt)
+        response = func(args)
 
         # Remove any empty strings from the list
         response = [sentence for sentence in response if sentence]
