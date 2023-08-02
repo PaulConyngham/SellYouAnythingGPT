@@ -168,31 +168,26 @@ def handle_chat():
         # Add user message to chat history
         st.session_state["messages"].append({"role": "user", "content": prompt})
 
-        # Create dictionary of arguments for function call
+        # Define the arguments dictionary here before calling the function
         args = {
             'product_name': st.session_state.get('product_name'),
             'user_choice': st.session_state.get('user_choice'),
             'user_confirmation': st.session_state.get('user_confirmation'),
             'category': st.session_state.get('category'),
             'feedback': st.session_state.get('feedback'),
+            'suggested_categories': st.session_state.get('suggested_categories')  # Using get method in case suggested_categories is not present
         }
 
         # Get the function using the dictionary mapping
         func = st.session_state["current_func_dict"].get(st.session_state["counter"], lambda x: "Invalid choice")
         response = func(args)
 
-        # Remove any empty strings from the list
-        response = [sentence for sentence in response if sentence]
-
-        # Join the list into a single string, with each sentence on a new line
-        response = '\n'.join(response)
-
         # If the response is True, it means the user has confirmed something
         if response is True:
             if st.session_state["current_func_dict"] is category_func_dict:
                 st.session_state["current_func_dict"] = product_info_func_dict  # Switch to the product info flow
             else:
-                st.session_state["current_func_dict"] = category_func_dict  # Switch back to the category flow cf
+                st.session_state["current_func_dict"] = category_func_dict  # Switch back to the category flow
             st.session_state["counter"] = 1  # Reset the counter
         else:
             if "no" in prompt.lower():
