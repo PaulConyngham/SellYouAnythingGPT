@@ -193,7 +193,7 @@ def handle_chat():
         func = st.session_state["current_func_dict"].get(st.session_state["counter"], lambda x: "Invalid choice")
         response = func(args)
 
-        # If the response is True, it means the user has confirmed something
+        # If the response is True, it means the user has confirmed som ething
         if response is True:
             if st.session_state["current_func_dict"] is category_func_dict:
                 st.session_state["current_func_dict"] = product_info_func_dict  # Switch to the product info flow
