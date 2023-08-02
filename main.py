@@ -37,14 +37,6 @@ with st.sidebar:
 openai.api_key = st.secrets["OPENAI_API_KEY"]
 
 
-if "openai_model" not in st.session_state:
-    st.session_state["openai_model"] = "gpt-3.5-turbo"
-    st.session_state.counter = 1
-    st.session_state.current_func_dict = category_func_dict
-    st.session_state.messages = []  # initialize messages
-
-
-
 # Functions for each case for the dictionary mapping further down below in the script
 
 def generate_conversation(model, messages):
@@ -66,7 +58,10 @@ def parse_categories(message):
     # Remove numerical prefixes from each line and return the result
     return [pattern.sub('', line) for line in lines]
 
-def initiate_categorization(product_name, feedback=None):
+def initiate_categorization(args):
+    product_name = args['product_name']
+    feedback = args.get('feedback')  # Use get method in case feedback is not present
+
     conversation = [
         {"role": "system", "content": "You are an assistant that helps clarify user product inputs. Your task is to provide a list of possible product categories for a given product, not to assume one."},
         {"role": "user", "content": f"I have a product named {product_name}. Can you suggest the possible categories for it?"},
@@ -81,23 +76,39 @@ def initiate_categorization(product_name, feedback=None):
 
     # Add 'other' option
     suggested_categories.append('other')
+    
+    st.session_state["suggested_categories"] = suggested_categories
 
     # Show categories to the user
     return suggested_categories
 
-def handle_category_choice(user_choice, suggested_categories):
+def handle_category_choice(args):
+
+    user_choice = args['user_choice']
+    suggested_categories = st.session_state["suggested_categories"]  # fetch the categories from session state
+
     if suggested_categories[user_choice - 1] == 'other':
         return "Please type your category:"
     else:
         return f"You have chosen the category '{suggested_categories[user_choice - 1]}'. Is this correct? (yes/no)"
 
-def confirm_category(user_confirmation):
+def confirm_category(args):
+
+    user_confirmation = args['user_confirmation']
+
     if user_confirmation.lower() in ["yes", "y"]:
         return True
     else:
         return "Please provide feedback to help identify the correct category."
 
-def initiate_product_info_generation(product_name, category, feedback=None):
+def initiate_product_info_generation(args):
+
+    # Extract values from args
+    product_name = args['product_name']
+    category = args['category']
+    feedback = args.get('feedback')  # Use get method in case feedback is not present
+
+
     conversation = [
         {"role": "system", "content": "You are an assistant that provides detailed information about a specific product in a given category. Provide information in a general sense, do not provide specific numbers on items. Finally provide your information in a list format"},
         {"role": "user", "content": f"I am selling a {product_name} in the {category} category. Can you provide more details about this product?"},
@@ -110,7 +121,10 @@ def initiate_product_info_generation(product_name, category, feedback=None):
 
     return f"Detailed Information for {product_name}:\n{product_details}\nIs the above product information correct? (yes/no)"
 
-def confirm_product_info(user_confirmation):
+def confirm_product_info(args):
+
+    user_confirmation = args['user_confirmation']
+
     if user_confirmation.lower() in ["yes", "y"]:
         return True
     else:
@@ -153,6 +167,15 @@ def handle_chat():
         st.chat_message("user").markdown(prompt)
         # Add user message to chat history
         st.session_state["messages"].append({"role": "user", "content": prompt})
+
+        # Create dictionary of arguments for function call
+        args = {
+            'product_name': st.session_state.get('product_name'),
+            'user_choice': st.session_state.get('user_choice'),
+            'user_confirmation': st.session_state.get('user_confirmation'),
+            'category': st.session_state.get('category'),
+            'feedback': st.session_state.get('feedback'),
+        }
 
         # Get the function using the dictionary mapping
         func = st.session_state["current_func_dict"].get(st.session_state["counter"], lambda x: "Invalid choice")
