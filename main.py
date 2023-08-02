@@ -85,7 +85,12 @@ def initiate_categorization(args):
 def handle_category_choice(args):
 
     user_choice = args['user_choice']
-    suggested_categories = st.session_state["suggested_categories"]  # fetch the categories from session state
+
+    if 'suggested_categories' in st.session_state:
+        suggested_categories = st.session_state["suggested_categories"]  # fetch the categories from session state
+    else:
+    # handle the case where 'suggested_categories' does not exist yet
+        suggested_categories = []
 
     if suggested_categories[user_choice - 1] == 'other':
         return "Please type your category:"
